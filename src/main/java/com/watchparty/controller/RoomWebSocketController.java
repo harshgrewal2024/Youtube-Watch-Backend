@@ -188,4 +188,21 @@ public class RoomWebSocketController {
                 roomService.getRoom(request.getRoomId())
         );
     }
+    
+    // Chat option
+    @MessageMapping("/chat/{roomId}")
+    public void sendChat(
+            @DestinationVariable String roomId,
+            @Payload ChatMessage message,
+            @Header("userId") String userId   // 🔥 IMPORTANT
+    ) {
+        message.setUserId(userId); // optional but better
+
+        messagingTemplate.convertAndSend("/topic/chat/" + roomId, message);
+    }
+    
+    
+    
+    
+    
 }
